@@ -47,7 +47,7 @@ public class SignatureService {
             secHeader.insertSecurityHeader();
         }
         WSSecSignature builder = new WSSecSignature(secHeader);
-        builder.setUserInfo(keyAlias, "");
+        builder.setUserInfo(keyAlias, "byx");
         builder.setKeyIdentifierType(keyIdentifierType);
         builder.setSignatureAlgorithm(sigAlgorithm);
         builder.setSigCanonicalization(canonAlgo);
