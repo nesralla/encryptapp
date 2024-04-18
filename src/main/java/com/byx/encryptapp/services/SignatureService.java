@@ -2,7 +2,6 @@ package com.byx.encryptapp.services;
 
 import org.apache.wss4j.common.WSEncryptionPart;
 import org.apache.wss4j.common.crypto.Crypto;
-import org.apache.wss4j.common.crypto.CryptoFactory;
 import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.WSDataRef;
@@ -50,23 +49,22 @@ public class SignatureService {
         WSEncryptionPart timestampPart = new WSEncryptionPart("Timestamp", WSConstants.WSU_NS, "");
         WSEncryptionPart bodyPart = new WSEncryptionPart(WSConstants.ELEM_BODY, soapNamespace, "Content");
         WSEncryptionPart[] parts = new WSEncryptionPart[]{timestampPart, bodyPart};
-        return includeSignature(doc, true, "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
-                WSConstants.C14N_EXCL_OMIT_COMMENTS, WSConstants.SHA256, parts, WSConstants.ISSUER_SERIAL);
+        return includeSignature(doc,
+                parts);
     }
 
-    private Document includeSignature(Document doc, boolean includeKeyInfo, String sigAlgorithm,
-                                      String canonAlgo, String digestAlgo, WSEncryptionPart[] parts,
-                                      int keyIdentifierType) throws Exception {
+    private Document includeSignature(Document doc,
+                                      WSEncryptionPart[] parts) throws Exception {
         WSSecHeader secHeader = new WSSecHeader(doc);
         if (secHeader.isEmpty()) {
             secHeader.insertSecurityHeader();
         }
         WSSecSignature builder = new WSSecSignature(secHeader);
         builder.setUserInfo(keyAlias, "byx");
-        builder.setKeyIdentifierType(keyIdentifierType);
-        builder.setSignatureAlgorithm(sigAlgorithm);
-        builder.setSigCanonicalization(canonAlgo);
-        builder.setDigestAlgo(digestAlgo);
+        builder.setKeyIdentifierType(WSConstants.ISSUER_SERIAL);
+        builder.setSignatureAlgorithm("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256");
+        builder.setSigCanonicalization(org.apache.wss4j.common.WSS4JConstants.C14N_EXCL_OMIT_COMMENTS);
+        builder.setDigestAlgo(org.apache.wss4j.common.WSS4JConstants.SHA256);
         if (parts != null) {
             for (WSEncryptionPart part : parts) {
                 builder.getParts().add(part);

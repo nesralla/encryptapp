@@ -11,6 +11,8 @@ public class XmlController {
     @PostMapping("/encrypt")
     public String encryptXml(@RequestBody String xml) {
         // Lógica para criptografar o XML com a chave
+
+
         return "XML criptografado";
     }
 

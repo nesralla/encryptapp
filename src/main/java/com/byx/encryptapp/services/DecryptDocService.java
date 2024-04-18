@@ -3,29 +3,19 @@ package com.byx.encryptapp.services;
 import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.common.crypto.Crypto;
 import org.apache.wss4j.common.crypto.CryptoFactory;
-import org.apache.wss4j.common.ext.WSSecurityException.ErrorCode;
 import org.apache.wss4j.dom.WSConstants;
-import org.apache.wss4j.dom.WSDataRef;
 import org.apache.wss4j.dom.engine.WSSecurityEngineResult;
 import org.apache.wss4j.dom.WSDocInfo;
 import org.apache.wss4j.dom.callback.DOMCallbackLookup;
 import org.apache.wss4j.dom.handler.RequestData;
-import org.apache.wss4j.dom.handler.WSHandlerResult;
 import org.apache.wss4j.dom.processor.Processor;
 import org.apache.wss4j.dom.util.WSSecurityUtil;
 import org.apache.wss4j.dom.engine.WSSConfig;
-import org.apache.wss4j.dom.engine.WSSecurityEngine;
-import org.apache.xml.security.signature.InvalidSignatureValueException;
 import org.springframework.beans.factory.annotation.Value;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import javax.xml.namespace.QName;
-import java.util.List;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.xml.namespace.QName;
 import java.util.List;
 
@@ -69,7 +59,10 @@ public class DecryptDocService {
             wsDocInfo.setCrypto(crypto);
             wsDocInfo.setSecurityHeader(securityHeader);
             List<WSSecurityEngineResult> results = p.handleToken(encryptedKeyElement, data);
-            //TODO testar XPATH
+            if (!results.isEmpty()) {
+                WSSecurityEngineResult first = results.get(0);
+
+            }
             encryptedKeyElement.getParentNode().removeChild(encryptedKeyElement);
             return removeSecurityHeaderIfEmpty(doc);
         } catch (Exception e) {

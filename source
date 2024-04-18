@@ -1,0 +1,8 @@
+JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-22.jdk/Contents/Home"
+PATH="${JAVA_HOME}/bin:${PATH}"
+export PATH
+
+
+export M2_HOME="“/Users/igornesrallaribeiro/maven/apache-maven-3.9.6"
+PATH="${M2_HOME}/bin:${PATH}"
+export PATH
